@@ -17,7 +17,7 @@ class LanguagePack::Base
 
   def self.os_codename
     result = if File.exists?("/etc/debian_version")
-      debian_version = File.read("/etc/debian_version")
+      debian_version = File.read("/etc/debian_version").chomp
       case debian_version
       when /^wheezy/
         "ubuntu-12.04"

@@ -15,9 +15,41 @@ Encoding.default_external = Encoding::UTF_8 if defined?(Encoding)
 class LanguagePack::Base
   include LanguagePack::ShellHelpers
 
-  VENDOR_URL           = ENV['BUILDPACK_VENDOR_URL'] || "https://s3-external-1.amazonaws.com/heroku-buildpack-ruby"
+  def self.os_codename
+    result = if File.exists?("/etc/debian_version")
+      debian_version = File.read("/etc/debian_version").chomp
+      case debian_version
+      when /^wheezy/
+        "ubuntu-12.04"
+      when /^jessie/
+        "ubuntu-14.04"
+      when /^7/
+        "debian-7"
+      end
+    elsif File.exists?("/etc/redhat-release")
+      redhat_release = File.read("/etc/redhat-release").chomp
+      case redhat_release
+      when /^CentOS release 6/i
+        "centos-6"
+      when /^CentOS Linux release 7/i
+        "centos-7"
+      when /^Fedora release 20/i
+        "fedora-20"
+      end
+    elsif File.exists?("/etc/SuSE-release")
+      suse_release = File.read("/etc/SuSE-release").chomp
+      case suse_release
+      when /^SUSE Linux Enterprise Server 12/i
+        "sles-12"
+      end
+    end
+    raise "Can't find binaries for distribution. Aborting." if result.nil?
+    result
+  end
+
   DEFAULT_LEGACY_STACK = "cedar"
   ROOT_DIR             = File.expand_path("../../..", __FILE__)
+  VENDOR_URL = ENV['BUILDPACK_VENDOR_URL'] || "https://s3-external-1.amazonaws.com/pkgr-buildpack-ruby/current/#{os_codename}"
 
   attr_reader :build_path, :cache
 
@@ -27,7 +59,7 @@ class LanguagePack::Base
   def initialize(build_path, cache_path=nil)
      self.class.instrument "base.initialize" do
       @build_path    = build_path
-      @stack         = ENV.fetch("STACK")
+      @stack         = ENV.fetch('STACK') { "" }
       @cache         = LanguagePack::Cache.new(cache_path) if cache_path
       @metadata      = LanguagePack::Metadata.new(@cache)
       @bundler_cache = LanguagePack::BundlerCache.new(@cache, @stack)

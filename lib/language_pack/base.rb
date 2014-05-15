@@ -15,8 +15,24 @@ Encoding.default_external = Encoding::UTF_8 if defined?(Encoding)
 class LanguagePack::Base
   include LanguagePack::ShellHelpers
 
-  VENDOR_URL           = ENV['BUILDPACK_VENDOR_URL'] || "https://s3-external-1.amazonaws.com/heroku-buildpack-ruby"
+  def self.os_codename
+    result = if File.exists?("/etc/debian_version")
+      debian_version = File.read("/etc/debian_version")
+      case debian_version
+      when /^wheezy/
+        "ubuntu-12.04"
+      when /^jessie/
+        "ubuntu-14.04"
+      when /^7/
+        "debian-#{debian_version}"
+      end
+    end
+    raise "Can't find binaries for distribution. Aborting." if result.nil?
+    result
+  end
+
   DEFAULT_LEGACY_STACK = "cedar"
+  VENDOR_URL = ENV['BUILDPACK_VENDOR_URL'] || "https://s3-external-1.amazonaws.com/pkgr-buildpack-ruby/20140408175240-#{os_codename}"
 
   attr_reader :build_path, :cache
 

@@ -25,6 +25,12 @@ class LanguagePack::Base
       when /^7/
         "debian-#{debian_version}"
       end
+    elsif File.exists?("/etc/redhat-release")
+      redhat_release = File.read("/etc/redhat-release").chomp
+      case redhat_release
+      when /^CentOS release 6.5/i
+        "centos-6.4"
+      end
     end
     raise "Can't find binaries for distribution. Aborting." if result.nil?
     result

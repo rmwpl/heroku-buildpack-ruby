@@ -23,7 +23,7 @@ class LanguagePack::Base
       when /^jessie/
         "ubuntu-14.04"
       when /^7/
-        "debian-#{debian_version}"
+        "debian-7.4"
       end
     elsif File.exists?("/etc/redhat-release")
       redhat_release = File.read("/etc/redhat-release").chomp

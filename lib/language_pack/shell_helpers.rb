@@ -50,9 +50,16 @@ module LanguagePack
     end
 
     def run!(command, options = {})
+      attempts = options[:attempts] || 0
       result = run(command, options)
-      error("Command: '#{command}' failed unexpectedly:\n#{result}") unless $?.success?
-      return result
+
+      if $?.success?
+        result
+      elsif attempts > 0
+        run!(command, options.merge(:attempts => attempts - 1))
+      else
+        error("Command: '#{command}' failed unexpectedly:\n#{result}")
+      end
     end
 
     # doesn't do any special piping. stderr won't be redirected.

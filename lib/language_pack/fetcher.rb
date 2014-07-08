@@ -14,7 +14,7 @@ module LanguagePack
 
     def fetch(path)
       curl = curl_command("-O #{@host_url.join(path)}")
-      run!(curl)
+      run!(curl, :attempts => 3)
     end
 
     def fetch_untar(path, files_to_extract = nil)

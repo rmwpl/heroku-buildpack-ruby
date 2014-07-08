@@ -42,13 +42,17 @@ module LanguagePack
     end
 
     def run!(command, options = {})
+      attempts = options[:attempts] || 0
       result      = run(command, options)
       error_class = options.delete(:error_class) || StandardError
-      unless $?.success?
+      if $?.success?
+        result
+      elsif attempts > 0
+        run!(command, options.merge(:attempts => attempts - 1))
+      else
         message = "Command: '#{command}' failed unexpectedly:\n#{result}"
         raise error_class, message
       end
-      return result
     end
 
     # doesn't do any special piping. stderr won't be redirected.

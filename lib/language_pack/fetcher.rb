@@ -16,7 +16,7 @@ module LanguagePack
 
     def fetch(path)
       curl = curl_command("-O #{@host_url.join(path)}")
-      run!(curl, error_class: FetchError)
+      run!(curl, error_class: FetchError, attempts: 3)
     end
 
     def fetch_untar(path, files_to_extract = nil)

@@ -57,6 +57,7 @@ module LanguagePack
         result
       elsif attempts > 0
         puts "Retrying command..."
+        sleep 10
         run!(command, options.merge(:attempts => attempts - 1))
       else
         error("Command: '#{command}' failed unexpectedly:\n#{result}")

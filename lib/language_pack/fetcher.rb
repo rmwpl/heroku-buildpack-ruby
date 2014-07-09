@@ -7,6 +7,7 @@ module LanguagePack
 
     include ShellHelpers
     CDN_YAML_FILE = File.expand_path("../../../config/cdn.yml", __FILE__)
+    FETCHER_RETRY = ENV.fetch('FETCHER_RETRY') { 5 }.to_i
 
     def initialize(host_url, stack = nil)
       @config   = load_config
@@ -16,22 +17,22 @@ module LanguagePack
 
     def fetch(path)
       curl = curl_command("-O #{@host_url.join(path)}")
-      run!(curl, error_class: FetchError, attempts: 3)
+      run!(curl, error_class: FetchError, attempts: FETCHER_RETRY)
     end
 
     def fetch_untar(path, files_to_extract = nil)
       curl = curl_command("#{@host_url.join(path)} -s -o")
-      run!("#{curl} - | tar zxf - #{files_to_extract}", error_class: FetchError)
+      run!("#{curl} - | tar zxf - #{files_to_extract}", error_class: FetchError, attempts: FETCHER_RETRY)
     end
 
     def fetch_bunzip2(path, files_to_extract = nil)
       curl = curl_command("#{@host_url.join(path)} -s -o")
-      run!("#{curl} - | tar jxf - #{files_to_extract}", error_class: FetchError)
+      run!("#{curl} - | tar jxf - #{files_to_extract}", error_class: FetchError, attempts: FETCHER_RETRY)
     end
 
     private
     def curl_command(command)
-      "set -o pipefail; curl --fail --retry 10 --connect-timeout #{curl_connect_timeout_in_seconds} --max-time #{curl_timeout_in_seconds} #{command}"
+      "set -o pipefail; curl -v --fail --retry 10 --connect-timeout #{curl_connect_timeout_in_seconds} --max-time #{curl_timeout_in_seconds} #{command}"
     end
 
     def curl_timeout_in_seconds

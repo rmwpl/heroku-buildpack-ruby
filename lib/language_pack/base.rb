@@ -24,13 +24,13 @@ class LanguagePack::Base
       when /^jessie/
         "ubuntu-14.04"
       when /^7/
-        "debian-7.4"
+        "debian-7"
       end
     elsif File.exists?("/etc/redhat-release")
       redhat_release = File.read("/etc/redhat-release").chomp
       case redhat_release
-      when /^CentOS release 6.5/i
-        "centos-6.4"
+      when /^CentOS release 6/i
+        "centos-6"
       end
     end
     raise "Can't find binaries for distribution. Aborting." if result.nil?
@@ -38,7 +38,7 @@ class LanguagePack::Base
   end
 
   DEFAULT_LEGACY_STACK = "cedar"
-  VENDOR_URL = ENV['BUILDPACK_VENDOR_URL'] || "https://s3-external-1.amazonaws.com/pkgr-buildpack-ruby/20140408175240-#{os_codename}"
+  VENDOR_URL = ENV['BUILDPACK_VENDOR_URL'] || "https://s3-external-1.amazonaws.com/pkgr-buildpack-ruby/20140904133812-#{os_codename}"
 
   attr_reader :build_path, :cache
 

@@ -47,7 +47,7 @@ class LanguagePack::Base
 
   DEFAULT_LEGACY_STACK = "cedar"
   ROOT_DIR             = File.expand_path("../../..", __FILE__)
-  VENDOR_URL = ENV['BUILDPACK_VENDOR_URL'] || "https://s3-external-1.amazonaws.com/pkgr-buildpack-ruby/20140408175240-#{os_codename}"
+  VENDOR_URL = ENV['BUILDPACK_VENDOR_URL'] || "https://s3-external-1.amazonaws.com/pkgr-buildpack-ruby/staging/#{os_codename}"
 
   attr_reader :build_path, :cache
 

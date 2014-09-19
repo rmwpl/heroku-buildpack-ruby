@@ -38,7 +38,7 @@ class LanguagePack::Base
   end
 
   DEFAULT_LEGACY_STACK = "cedar"
-  VENDOR_URL = ENV['BUILDPACK_VENDOR_URL'] || "https://s3-external-1.amazonaws.com/pkgr-buildpack-ruby/20140919123100/#{os_codename}"
+  VENDOR_URL = ENV['BUILDPACK_VENDOR_URL'] || "https://s3-external-1.amazonaws.com/pkgr-buildpack-ruby/20140919143300/#{os_codename}"
 
   attr_reader :build_path, :cache
 

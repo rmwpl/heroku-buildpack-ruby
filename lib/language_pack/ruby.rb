@@ -764,7 +764,7 @@ params = CGI.parse(uri.query || "")
       convert_stack = @bundler_cache.old?
       @bundler_cache.convert_stack(stack_change) if convert_stack
       if !new_app? && stack_change
-        puts "Purging Cache. Changing stack from #{old_stack} to #{@stack}"
+        puts "Purging Cache. Changing stack from #{old_stack.inspect} to #{@stack.inspect} [stack_change=#{stack_change.inspect}]"
         purge_bundler_cache(old_stack)
       elsif !new_app? && !convert_stack
         @bundler_cache.load

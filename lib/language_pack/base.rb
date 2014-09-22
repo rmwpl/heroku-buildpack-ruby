@@ -29,8 +29,10 @@ class LanguagePack::Base
     elsif File.exists?("/etc/redhat-release")
       redhat_release = File.read("/etc/redhat-release").chomp
       case redhat_release
-      when /^CentOS release 6.5/i
-        "centos-6.4"
+      when /^CentOS release 6/i
+        "centos-6"
+      when /^Fedora release 20/i
+        "fedora-20"
       end
     end
     raise "Can't find binaries for distribution. Aborting." if result.nil?

@@ -34,6 +34,12 @@ class LanguagePack::Base
       when /^Fedora release 20/i
         "fedora-20"
       end
+    elsif File.exists?("/etc/SuSE-release")
+      suse_release = File.read("/etc/SuSE-release").chomp
+      case suse_release
+      when /^SUSE Linux Enterprise Server 12/i
+        "sles-12"
+      end
     end
     raise "Can't find binaries for distribution. Aborting." if result.nil?
     result

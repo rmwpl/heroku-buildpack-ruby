@@ -31,6 +31,8 @@ class LanguagePack::Base
       case redhat_release
       when /^CentOS release 6/i
         "centos-6"
+      when /^CentOS Linux release 7/i
+        "centos-7"
       when /^Fedora release 20/i
         "fedora-20"
       end

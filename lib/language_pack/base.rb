@@ -25,6 +25,8 @@ class LanguagePack::Base
         "ubuntu-14.04"
       when /^7/
         "debian-7"
+      when /^8/
+        "debian-8"
       end
     elsif File.exists?("/etc/redhat-release")
       redhat_release = File.read("/etc/redhat-release").chomp
